@@ -28,13 +28,24 @@ namespace Prueba.Controllers
 
         [HttpPost]
         [Route("AgregarProducto")]
-        public async Task<IActionResult> AgregarProducto(Producto P)
+        public async Task<IActionResult> AgregarProducto(ProductoDTO P)
         {
+            var nproducto = new Producto()
+            {
+                ProductoId = P.ProductoId,
+                Nombre = P.Nombre,
+                Descripcion = P.Descripcion,
+                Precio = P.Precio,
+                Stock = P.Stock,
+                Imagen = P.Imagen,
+                CategoriaId = P.CategoriaId,
+            };
+
             var existe = await _context.TblProductos.Where(x => x.Nombre == P.Nombre).FirstOrDefaultAsync();
 
             if (existe == null)
             {
-                _context.Add(P);
+                _context.Add(nproducto);
                 await _context.SaveChangesAsync();
                 return Ok();
 
@@ -45,9 +56,20 @@ namespace Prueba.Controllers
 
         [HttpPut]
         [Route("ActualizarProducto")]
-        public async Task<IActionResult> ActualizarProducto(int ProductoId , Producto P)
+        public async Task<IActionResult> ActualizarProducto(int ProductoId , ProductoDTO P)
         {
-            var existe = _context.TblProductos.Where(x=> x.ProductoId == ProductoId).FirstOrDefault();
+            var nproducto = new Producto()
+            {
+                ProductoId = P.ProductoId,
+                Nombre = P.Nombre,
+                Descripcion = P.Descripcion,
+                Precio = P.Precio,
+                Stock = P.Stock,
+                Imagen = P.Imagen,
+                CategoriaId = P.CategoriaId,
+            };
+
+            var existe = _context.TblProductos.Where(x=> x.ProductoId == ProductoId && x.CategoriaId == P.CategoriaId).FirstOrDefault();
             if (existe == null)
             {
                 return NotFound();
