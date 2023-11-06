@@ -56,7 +56,7 @@ namespace Prueba.Controllers
 
         [HttpPut]
         [Route("ActualizarProducto")]
-        public async Task<IActionResult> ActualizarProducto(int ProductoId , ProductoDTO P)
+        public async Task<IActionResult> ActualizarProducto(int ProductoId, ProductoDTO P)
         {
             var nproducto = new Producto()
             {
@@ -69,12 +69,12 @@ namespace Prueba.Controllers
                 CategoriaId = P.CategoriaId,
             };
 
-            var existe = _context.TblProductos.Where(x=> x.ProductoId == ProductoId && x.CategoriaId == P.CategoriaId).FirstOrDefault();
+            var existe = _context.TblProductos.Where(x => x.ProductoId == ProductoId && x.CategoriaId == P.CategoriaId).FirstOrDefault();
             if (existe == null)
             {
                 return NotFound();
             }
-                
+
             existe.Nombre = P.Nombre;
             existe.Descripcion = P.Descripcion;
             await _context.SaveChangesAsync();
@@ -101,13 +101,30 @@ namespace Prueba.Controllers
         [HttpGet]
         [Route("ObtenerSegunId")]
         public async Task<IActionResult> ObtenerSegunId(int I)
-        { 
+        {
             var Idpctos = await _context.TblProductos.FirstOrDefaultAsync(x => x.ProductoId == I);
             if (Idpctos == null)
             {
                 return NotFound();
             }
             return Ok(Idpctos);
+        }
+
+        [HttpGet]
+        [Route("ObtenerProductosSegunCategoria")]
+        public async Task<IActionResult> ObtenerProductosSegunCategoria(int I)
+        {
+            var cat = await _context.TblProductos.Where(x => x.CategoriaId.Equals(I)).Select(P => new
+            {
+                ProductoId = P.ProductoId,
+                Nombre = P.Nombre,
+                Descripcion = P.Descripcion,
+                Precio = P.Precio,
+                Stock = P.Stock,
+                Imagen = P.Imagen,
+                CategoriaId = P.Categoria.Nombre,
+            }).ToListAsync();
+            return Ok(cat);
         }
 
 
