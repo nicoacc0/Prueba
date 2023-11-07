@@ -22,6 +22,8 @@ namespace Prueba.Model
         public string Rol { get; set; }
         public string Password { get; set; }
 
+        public int asdas { get; set; }
+
     }
 
 
