@@ -6,6 +6,8 @@ namespace Prueba.Model
     {
         public DbSet<Producto> TblProductos { get; set; }
         public DbSet<Categoria> TblCategorias { get; set; }
+        public DbSet<Usuario> TblUsuarios { get; set; }
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
